@@ -1,0 +1,2 @@
+replace -1
+normalzie column value
