@@ -38,3 +38,9 @@ Thumbs.db
 
 # testing #
 *.txt
+# virtual enviroment #
+venv*/
+env*/
+virtualenv*/
+.venv*/
+dsa4263venv*/
