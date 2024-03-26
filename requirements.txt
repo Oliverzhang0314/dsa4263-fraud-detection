@@ -5,3 +5,4 @@ seaborn==0.13.2
 pillow==10.2.0
 scikit-learn==1.3.0
 lazypredict==0.2.12
+shap==0.45.0
