@@ -43,6 +43,6 @@ venv*/
 env*/
 virtualenv*/
 .venv*/
-dsa4263venv*/
 
 *.pkl
+dsa4263venv*/
