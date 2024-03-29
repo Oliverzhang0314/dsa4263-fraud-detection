@@ -38,6 +38,9 @@ Thumbs.db
 
 # testing #
 *.txt
+*.json
+__pycache__
+
 # virtual enviroment #
 venv*/
 env*/
