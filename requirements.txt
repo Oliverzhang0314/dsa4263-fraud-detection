@@ -6,4 +6,8 @@ pillow==10.2.0
 scikit-learn==1.3.0
 lazypredict==0.2.12
 shap==0.45.0
+
+bz2file==0.98
+tld==0.13
+googlesearch-python==1.2.3
 pycebox==0.0.1
