@@ -21,6 +21,7 @@ def pre_plot(data):
 def distribution_plot(data, col_name):
     '''Plot distribution of selected categorical column.'''
     data[col_name].value_counts().sort_index().plot.bar(x="Target Value", y="Number of Occurrences", title="Distribution of Fraud Label")
+    plt.savefig("../plots/distribution_plot.png")
     plt.show()
 
 def feat_importance(model, feat_cols):
@@ -34,6 +35,7 @@ def feat_importance(model, feat_cols):
     plt.barh(range(len(sorted_idx)), feature_importances[sorted_idx], align="center")
     plt.yticks(range(len(sorted_idx)), feat_cols[sorted_idx])
     plt.title("Feature Importance of Classification Model")
+    plt.savefig("../plots/feat_importance.png")
     plt.show()
     
 def confusion_plot(y_test, y_pred):
@@ -41,13 +43,17 @@ def confusion_plot(y_test, y_pred):
     cm = confusion_matrix(y_test, y_pred)
     display = ConfusionMatrixDisplay(confusion_matrix=cm)
     display.plot()
+    plt.title("Confusion Matrix of Classification Model")
+    plt.savefig("../plots/confusion_plot.png")
     plt.show()
 
 def precision_recall(y_test, y_pred):
     '''Plot precision recall.'''
     precision, recall, _ = precision_recall_curve(y_test, y_pred)
-    disp = PrecisionRecallDisplay(precision=precision, recall=recall)
-    disp.plot()
+    display = PrecisionRecallDisplay(precision=precision, recall=recall)
+    display.plot()
+    plt.title("Precision-Recall of Classification Model")
+    plt.savefig("../plots/precision_recall.png")
     plt.show()
 
 def roc_curve(y_test, y_pred):
@@ -59,11 +65,15 @@ def roc_curve(y_test, y_pred):
     # plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
     plt.plot([0, 0], [0, 1], color='red', linestyle='-.')
     plt.plot([0, 1], [1, 1], color='red', linestyle='-.')
+    plt.title("ROC Curve of Classification Model")
+    plt.savefig("../plots/roc_curve.png")
     plt.show()
     
 def calibration_disp(model, X_test, y_test):
     '''Plot calibration display.'''
     CalibrationDisplay.from_estimator(model, X_test, y_test)
+    plt.title("Calibration Display of Classification Model")
+    plt.savefig("../plots/calibration_disp.png")
     plt.show()
 
 def decision_boundary(model, best_params, X_train, y_train):
@@ -89,6 +99,8 @@ def decision_boundary(model, best_params, X_train, y_train):
     clean_df = pd.concat([X_train, y_train], axis=1)
     samples = clean_df.sample(frac=0.001, replace=False, random_state=1)
     display.ax_.scatter(X_train[X_train.columns[sorted_idx[-1]]], X_train[X_train.columns[sorted_idx[-2]]], c=y_train, edgecolor="k")
+    plt.title("Decision Boundary of Classification Model")
+    plt.savefig("../plots/decision_boundary.png")
     plt.show()
 
 def learning_curv(model, X_train, y_train):
@@ -96,6 +108,9 @@ def learning_curv(model, X_train, y_train):
     train_sizes, train_scores, test_scores = learning_curve(model, X_train, y_train)
     display = LearningCurveDisplay(train_sizes=train_sizes, train_scores=train_scores, test_scores=test_scores, score_name="Score")
     display.plot()
+    plt.title("Learning Curve of Classification Model")
+    plt.savefig("../plots/learning_curv.png")
+    plt.show()
     
 # # Histogram
 # plt.hist(data["numerical_column"], bins=20, color="skyblue", edgecolor="black")

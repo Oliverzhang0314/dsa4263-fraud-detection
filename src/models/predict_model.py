@@ -1,4 +1,6 @@
+import pickle
 from sklearn.metrics import accuracy_score, recall_score
+from typing import overload
 
 def predict(model, X_test, y_test=None):
     '''Predict using fine-tuned model'''
