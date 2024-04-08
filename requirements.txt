@@ -11,3 +11,5 @@ bz2file==0.98
 tld==0.13
 googlesearch-python==1.2.3
 pycebox==0.0.1
+kaggle
+opendatasets

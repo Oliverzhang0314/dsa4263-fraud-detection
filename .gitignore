@@ -19,9 +19,11 @@
 *.rar
 *.tar
 *.zip
+*.egg-info
 
 # Logs and databases #
 ######################
+__pycache__
 *.log
 *.sql
 *.sqlite
@@ -36,13 +38,14 @@
 ehthumbs.db
 Thumbs.db
 
-# testing #
+# MISC #
+######################
 *.txt
-# virtual enviroment #
+*.json
+
+# Virtual enviroment #
+######################
 venv*/
 env*/
 virtualenv*/
-.venv*/
-
-*.pkl
 dsa4263venv*/
