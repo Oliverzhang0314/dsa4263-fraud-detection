@@ -36,14 +36,14 @@ def remove_redundant_cols(data):
 def scale_cols(data):
     '''Apply min-max scaling to all feature columns.'''
     
-    # Select all columns except the last one
-    cols_to_scale = data.columns[:-1]
+    # # Select all columns except the last one
+    # cols_to_scale = data.columns[:-1]
 
-    # Apply the operation to selected columns
-    data[cols_to_scale] = (data[cols_to_scale] - data[cols_to_scale].min()) / \
-                        (data[cols_to_scale].max() - data[cols_to_scale].min())
+    # # Apply the operation to selected columns
+    # data[cols_to_scale] = (data[cols_to_scale] - data[cols_to_scale].min()) / \
+    #                     (data[cols_to_scale].max() - data[cols_to_scale].min())
     
-    data.isnull().sum()
+    # data.isnull().sum()
     
     return data
 
