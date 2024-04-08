@@ -52,7 +52,7 @@ pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 python-slugify==8.0.4
 pytz==2024.1
-pywin32==306
+# pywin32==306
 pyzmq==25.1.2
 requests==2.31.0
 scikit-image==0.22.0
