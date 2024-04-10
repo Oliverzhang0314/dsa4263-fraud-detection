@@ -5,11 +5,9 @@ setup(
    version="0.1.0",
    license="MIT",
    description="Module to build classification model for the purpose of Malicious URL detection",
-   
    author="Yi Fu ZHU",
    author_email="zhuyifu1998@gmail.com",
    url="https://github.com/Oliverzhang0314/dsa4263-fraud-detection",
-   
    packages=find_packages(include=["fraud"]),
    install_requires=[
        "numpy==1.26.4",

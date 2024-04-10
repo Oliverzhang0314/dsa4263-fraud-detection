@@ -1,5 +1,6 @@
 from .data.make_dataset import (
     download_and_load,
+    download_and_load_new,
     download, load, upload,
 )
 
@@ -22,5 +23,9 @@ from .visualization.visualize import (
     roc_curve, 
     calibration_disp, 
     decision_boundary, 
-    learning_curv
+    learning_curv,
+    lime_plot,
+    iceplot,
+    shap_plot
+
 )
