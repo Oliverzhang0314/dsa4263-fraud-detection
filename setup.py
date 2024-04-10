@@ -19,6 +19,8 @@ setup(
        "lazypredict==0.2.12",
        "shap==0.45.0",
        "pycebox==0.0.1",
+       "lime==0.2.0.1",
+       "skimpy==0.0.14",
        "kaggle",
        "opendatasets",
     ],

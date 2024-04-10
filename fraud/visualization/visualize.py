@@ -8,13 +8,14 @@ from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.model_selection import LearningCurveDisplay, learning_curve
 from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier
-from pycebox.ice import ice, ice_plot
-import shap
 from sklearn.model_selection import train_test_split
-from lime import lime_tabular, lime_text
-from fraud.features.pre_processing import preprocess_with_feature_selection
 from fraud.models.train_model import train
 from fraud.models.predict_model import predict
+from fraud.features.pre_processing import preprocess_with_feature_selection
+import shap
+from lime import lime_tabular
+from pycebox.ice import ice, ice_plot
+
 
 def pre_plot(data):
     '''Plot visualization to explore data before training.'''
@@ -107,46 +108,43 @@ def decision_boundary(model, best_params, X_train, y_train):
     plt.savefig("../plots/decision_boundary.png")
     plt.show()
 
-def learning_curv(model, X_train, y_train):
+def learning_curve(model, X_train, y_train):
     '''Plot learning curve.'''
     train_sizes, train_scores, test_scores = learning_curve(model, X_train, y_train)
     display = LearningCurveDisplay(train_sizes=train_sizes, train_scores=train_scores, test_scores=test_scores, score_name="Score")
     display.plot()
     plt.title("Learning Curve of Classification Model")
-    plt.savefig("../plots/learning_curv.png")
+    plt.savefig("../plots/learning_curve.png")
     plt.show()
 
-
-
-def plot_accuracy_vs_k(original_df, y_column, k_values):
-    '''
-    plotting test accuracy against k, where k is the number of top predictors selected by mutual information
-    '''
+def plot_accuracy_vs_k(data, y_column, k_values, seed=1):
+    '''Plot test accuracy against k, where k is the number of top predictors selected by mutual information.'''
+    
+    # Initialize metrics list
     accuracies = []
     recalls = []
     
     for k in k_values:
         print(f"[info]: k = {k}, currently selecting top {k} features.")
+        
         # Preprocess the dataset to select top K features
-        reduced_df = preprocess_with_feature_selection(original_df, k, remove_missing_col = False)
-        X = reduced_df.drop("phishing", axis=1)
-        y = reduced_df["phishing"]
+        reduced_df = preprocess_with_feature_selection(data, k, remove_missing_col=False)
+        X = reduced_df.drop(y_column, axis=1)
+        y = reduced_df[y_column]
 
-        # Split the dataset into training and testing sets
-        X_train_reduced, X_test_reduced, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=20, stratify=reduced_df["phishing"])
+        # Split the dataset intto training and testing sets
+        X_train_reduced, X_test_reduced, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=reduced_df[y_column])
 
         # Train a Random Forest classifier
-        clf = train(RandomForestClassifier(random_state=20), X_train_reduced, y_train)
+        clf = train(RandomForestClassifier(random_state=seed), X_train_reduced, y_train)
         y_pred = predict(clf, X_test_reduced, y_test)
 
         # Predict and calculate accuracy
         accuracy = accuracy_score(y_test, y_pred)
         recall = recall_score(y_test, y_pred)
-        confusion_mat = confusion_matrix(y_test, y_pred)
         accuracies.append(accuracy)
         recalls.append(recall)
-        print(confusion_mat)
-
+        confusion_mat = confusion_plot(y_test, y_pred)
 
     # Plot the results
     plt.figure(figsize=(10, 6))
@@ -155,11 +153,85 @@ def plot_accuracy_vs_k(original_df, y_column, k_values):
     plt.ylabel('Accuracy')
     plt.title('Accuracy vs. Number of Top K Features')
     plt.grid(True)
+    plt.savefig("../plots/accuracy_vs_k.png")
     plt.show()
 
-    return accuracies, recalls
+    # return accuracies, recalls
 
+def shap_plot(data, y_column, k, seed=1):
+    '''Plot SHAP value for first k rows.'''
     
+    # Preprocess the dataset to splot train test set
+    X = data.drop(y_column, axis=1)[1:k]
+    y = data[y_column][1:k]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=data[y_column][1:k])
+
+    # Rf Classifier
+    clf = train(RandomForestClassifier(random_state=seed), X_train, y_train)
+    explainer = shap.Explainer(clf)
+    shap_values = explainer.shap_values(X)
+    shap_values = shap_values[..., 0]
+    expected_value = explainer.expected_value
+    if isinstance(expected_value, list):
+        expected_value = expected_value[1]
+    print(f"Explainer expected value: {expected_value}")
+
+    shap.summary_plot(shap_values, X)
+    
+def lime_plot(X_train, X_test, y_test, k, model):
+    '''Plot LIME value for k random rows.'''
+    
+    # LIME tabular explainer
+    explainer = lime_tabular.LimeTabularExplainer(X_train.values,
+                                              feature_names=X_train.columns,
+                                              class_names=['Not Phishing', 'Phishing'],
+                                              discretize_continuous=True)
+    
+    # Generate 3 random indices
+    idx = np.random.randint(0, X_test.shape[0], size=k)
+
+    # Extract instances and true classes using the indices
+    instances = X_test.iloc[idx].values
+    true_classes = y_test.iloc[idx]
+
+    # Loop through the instances and explain each prediction
+    for i, instance in enumerate(instances):
+        true_class = true_classes.iloc[i]
+    
+        # Explain the prediction for this instance
+        explanation = explainer.explain_instance(instance,
+                                                model.predict_proba,
+                                                num_features=6,
+                                                top_labels=1)
+    
+        print(f'Instance {i+1}:')
+        print('True Class:', 'Phishing' if true_class == 1 else 'Not Phishing')
+        print('Predicted Class:', 'Phishing' if model.predict([instance])[0] == 1 else 'Not Phishing')
+        print('Explanation for Predicted Class:')
+        explanation.show_in_notebook()
+    
+def ice_curve(col_of_interest, X_train, model):
+    '''Plot ICE curve for column of interest.'''
+    
+    def predict_fn(X, model):
+        # Predict probabilities for each row
+        proba = model.predict_proba(X)
+        # Return the probabilities of the positive class (assuming binary classification)
+        return proba[:, 1]
+    
+    # Create ICE Data for the col_of_interest
+    ice_data = ice(X_train.iloc[1:100,], col_of_interest, lambda x: predict_fn(x, model))
+    
+    # Plot ICE Curves
+    fig, ax = plt.subplots()
+    ice_plot(ice_data,linewidth=1,ax=ax)
+    ax.set_xlabel("Feature Value")
+    ax.set_ylabel("Probability of phishing")
+    ax.set_title("ICE Curves for Random Forest Model")
+    plt.tight_layout()
+    plt.show()
+
+        
 # # Histogram
 # plt.hist(data["numerical_column"], bins=20, color="skyblue", edgecolor="black")
 # plt.title("Histogram of Numerical Column")
@@ -194,67 +266,4 @@ def plot_accuracy_vs_k(original_df, y_column, k_values):
 # plt.ylabel("Numerical Column")
 # plt.xticks(rotation=45)
 # plt.show()
-def lime_plot(clean_X_train,clean_X_test,clean_y_test,clean_clf):
-    #LIME tabular explainer
-    explainer = lime_tabular.LimeTabularExplainer(clean_X_train.values,
-                                              feature_names=clean_X_train.columns,
-                                              class_names=['Not Phishing', 'Phishing'],
-                                              discretize_continuous=True)
-    
-#  Generate 3 random indices
-    idx = np.random.randint(0, clean_X_test.shape[0], size=3)
 
-# Extract instances and true classes using the indices
-    instances = clean_X_test.iloc[idx].values
-    true_classes = clean_y_test.iloc[idx]
-
-# Loop through the instances and explain each prediction
-    for i, instance in enumerate(instances):
-        true_class = true_classes.iloc[i]
-    
-    # Explain the prediction for this instance
-    explanation = explainer.explain_instance(instance,
-                                             clean_clf.predict_proba,
-                                             num_features=6,
-                                             top_labels=1)
-    
-    print(f'Instance {i+1}:')
-    print('True Class:', 'Phishing' if true_class == 1 else 'Not Phishing')
-    print('Predicted Class:', 'Phishing' if clean_clf.predict([instance])[0] == 1 else 'Not Phishing')
-    print('Explanation for Predicted Class:')
-    explanation.show_in_notebook()
-
-def predict_fn(X,clean_clf):
-        # Predict probabilities for each row
-        proba = clean_clf.predict_proba(X)
-        # Return the probabilities of the positive class (assuming binary classification)
-        return proba[:, 1]
-def iceplot(col_of_interest,xlim,clean_X_train,clean_clf):
-  
-    # Create ICE Data for the col_of_interest
-    ice_data = ice(clean_X_train.iloc[1:100,], col_of_interest, lambda x: predict_fn(x, clean_clf))
-    # Plot ICE Curves
-    fig, ax = plt.subplots()
-    ice_plot(ice_data,linewidth=1,ax=ax)
-    ax.set_xlabel("Feature Value")
-    ax.set_ylabel("Probability of phishing")
-    ax.set_title("ICE Curves for Random Forest Model")
-    ax.set_xlim(0, xlim)  # Limit x-axis from 0 to 0.1
-    plt.tight_layout()
-    plt.show()
-def shap_plot(cleaned_data,size):
-    clean_X = cleaned_data.drop("phishing", axis=1)[1:size]
-    clean_y = cleaned_data["phishing"][1:size]
-    clean_X_train, clean_X_test, clean_y_train, clean_y_test = train_test_split(clean_X, clean_y, test_size=0.2, random_state=20, stratify=cleaned_data["phishing"][1:size])
-
-    # Rf Classifier
-    clean_clf = RandomForestClassifier().fit(clean_X_train, clean_y_train)
-    explainer = shap.Explainer(clean_clf)
-    shap_values = explainer.shap_values(clean_X)
-    shap_values = shap_values[..., 0]
-    expected_value = explainer.expected_value
-    if isinstance(expected_value, list):
-        expected_value = expected_value[1]
-    print(f"Explainer expected value: {expected_value}")
-
-    shap.summary_plot(shap_values, clean_X)

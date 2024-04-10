@@ -3,7 +3,7 @@ from sklearn.feature_selection import *
 
 def preprocess(data):
     '''
-    The preprocessing steps involved:
+    The pre-processing steps involved:
         - Remove redundant columns
         - Min max scaling of features
         - 
@@ -25,7 +25,8 @@ def preprocess_with_feature_selection(data, topk, remove_missing_col):
         - Remove redundant columns (min==max)
         - Remove cols not available in the new dataset
         - Select top K features, by mutual information
-        - min max scaling'''
+        - min max scaling
+    '''
     data = remove_redundant_cols(data)
     if remove_missing_col:
         data = remove_missing_cols(data)

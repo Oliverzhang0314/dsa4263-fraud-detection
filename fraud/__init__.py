@@ -13,11 +13,6 @@ from .features.pre_processing import (
     select_top_k_based_on_mutual_information
 )
 
-from .features.build_features import(
-    process_new_url,
-    reformat_df
-)
-
 from .models.lazy_predict import (lazy_predict,)
 from .models.predict_model import (predict,)
 from .models.train_model import (train,)
@@ -31,9 +26,9 @@ from .visualization.visualize import (
     roc_curve, 
     calibration_disp, 
     decision_boundary, 
-    learning_curv,
+    learning_curve,
+    plot_accuracy_vs_k,
     lime_plot,
-    iceplot,
     shap_plot,
-    plot_accuracy_vs_k
+    ice_curve
 )
