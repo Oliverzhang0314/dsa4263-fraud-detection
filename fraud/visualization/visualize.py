@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import metrics
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, precision_recall_curve, PrecisionRecallDisplay
+from sklearn.metrics import accuracy_score, recall_score, confusion_matrix, ConfusionMatrixDisplay, precision_recall_curve, PrecisionRecallDisplay
 from sklearn.calibration import CalibrationDisplay
 from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.model_selection import LearningCurveDisplay, learning_curve
@@ -12,6 +12,9 @@ from pycebox.ice import ice, ice_plot
 import shap
 from sklearn.model_selection import train_test_split
 from lime import lime_tabular, lime_text
+from fraud.features.pre_processing import preprocess_with_feature_selection
+from fraud.models.train_model import train
+from fraud.models.predict_model import predict
 
 def pre_plot(data):
     '''Plot visualization to explore data before training.'''
@@ -22,7 +25,7 @@ def pre_plot(data):
 def distribution_plot(data, col_name):
     '''Plot distribution of selected categorical column.'''
     data[col_name].value_counts().sort_index().plot.bar(x="Target Value", y="Number of Occurrences", title="Distribution of Fraud Label")
-    plt.savefig("../plots/distribution_plot.png")
+    plt.savefig(f'../plots/distribution_plot.png')
     plt.show()
 
 def feat_importance(model, feat_cols):
@@ -112,6 +115,50 @@ def learning_curv(model, X_train, y_train):
     plt.title("Learning Curve of Classification Model")
     plt.savefig("../plots/learning_curv.png")
     plt.show()
+
+
+
+def plot_accuracy_vs_k(original_df, y_column, k_values):
+    '''
+    plotting test accuracy against k, where k is the number of top predictors selected by mutual information
+    '''
+    accuracies = []
+    recalls = []
+    
+    for k in k_values:
+        print(f"[info]: k = {k}, currently selecting top {k} features.")
+        # Preprocess the dataset to select top K features
+        reduced_df = preprocess_with_feature_selection(original_df, k, remove_missing_col = False)
+        X = reduced_df.drop("phishing", axis=1)
+        y = reduced_df["phishing"]
+
+        # Split the dataset into training and testing sets
+        X_train_reduced, X_test_reduced, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=20, stratify=reduced_df["phishing"])
+
+        # Train a Random Forest classifier
+        clf = train(RandomForestClassifier(random_state=20), X_train_reduced, y_train)
+        y_pred = predict(clf, X_test_reduced, y_test)
+
+        # Predict and calculate accuracy
+        accuracy = accuracy_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        confusion_mat = confusion_matrix(y_test, y_pred)
+        accuracies.append(accuracy)
+        recalls.append(recall)
+        print(confusion_mat)
+
+
+    # Plot the results
+    plt.figure(figsize=(10, 6))
+    plt.plot(k_values, accuracies, marker='o')
+    plt.xlabel('Number of Top K Features')
+    plt.ylabel('Accuracy')
+    plt.title('Accuracy vs. Number of Top K Features')
+    plt.grid(True)
+    plt.show()
+
+    return accuracies, recalls
+
     
 # # Histogram
 # plt.hist(data["numerical_column"], bins=20, color="skyblue", edgecolor="black")
