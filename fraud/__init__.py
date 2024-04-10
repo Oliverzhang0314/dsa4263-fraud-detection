@@ -5,8 +5,11 @@ from .data.make_dataset import (
 
 from .features.pre_processing import (
     preprocess,
+    preprocess_with_feature_selection,
     remove_redundant_cols, 
     scale_cols,
+    remove_missing_cols,
+    select_top_k_based_on_mutual_information
 )
 
 from .models.lazy_predict import (lazy_predict,)
@@ -22,5 +25,6 @@ from .visualization.visualize import (
     roc_curve, 
     calibration_disp, 
     decision_boundary, 
-    learning_curv
+    learning_curv,
+    plot_accuracy_vs_k
 )
