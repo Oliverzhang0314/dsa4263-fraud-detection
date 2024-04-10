@@ -8,7 +8,7 @@ setup(
    author="Yi Fu ZHU",
    author_email="zhuyifu1998@gmail.com",
    url="https://github.com/Oliverzhang0314/dsa4263-fraud-detection",
-   packages=find_packages(include=["fraud"]),
+   packages=find_packages(include=["fraud", "fraud/data", "fraud/features", "fraud/models", "fraud/visualization"]),
    install_requires=[
        "numpy==1.26.4",
        "pandas==2.2.1",

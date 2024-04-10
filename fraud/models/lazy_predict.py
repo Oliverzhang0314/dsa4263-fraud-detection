@@ -12,12 +12,15 @@ def lazy_predict(data, exclude=None):
     y = data["phishing"]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=20, stratify=data["phishing"])
     
-    # Remove problematic/bad performance classifiers from Supervised.CLASSIFIERS
+     # Remove problematic/bad performance classifiers from Supervised.CLASSIFIERS
     exclude_lst = [
                 sklearn.svm.NuSVC,
                 sklearn.svm.SVC,
                 sklearn.svm.LinearSVC,
-                sklearn.calibration.CalibratedClassifierCV
+                sklearn.calibration.CalibratedClassifierCV,
+                sklearn.semi_supervised._label_propagation.LabelPropagation,
+                sklearn.semi_supervised._label_propagation.LabelSpreading,
+                sklearn.naive_bayes.CategoricalNB
             ]
     
     if exclude is not None:
