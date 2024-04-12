@@ -18,17 +18,17 @@ In our [notebooks](notebooks/), we uses API calls to download data, so you need 
 ## Installation
 The python version requirement is **Python >= 3.12**.   
   
-Step 1: Clone this repository to your local machine
+**Step 1: Clone this repository to your local machine**
 ```bash
 git clone https://github.com/Oliverzhang0314/dsa4263-fraud-detection.git
 ```
    
-Step 2: Navigate to the project directory
+**Step 2: Navigate to the project directory**
 ```bash
 cd dsa4263-fraud-detection
 ```
    
-Step 3: Install the requirements dependencies
+**Step 3: Install the requirements dependencies**
 ```bash
 pip install -e .
 ```
@@ -39,6 +39,43 @@ pip install -r requirements.txt
 
 ***If your development introduces new packages as dependencies, list them in the `requirements.txt` file. Format each dependency on a new line, specifying the exact version to maintain consistency across environments***
 
-## How to use
+# How to use
 File Structure
+```bash
+dsa4263-fraud-detection
+    ├───data
+    │   ├───raw
+    │   │   ├───dataset-phishing-domain-detection-cybersecurity
+    │   │   └───malicious-urls-dataset
+    │   └───processed
+    │       ├───dataset-phishing-domain-detection-cybersecurity
+    │       └───malicious-urls-dataset
+    ├───fraud
+    │   ├───data
+    │   │   └───make_dataset.py
+    │   ├───features
+    │   │   └───pre_processing.py
+    │   │   └───build_features.py
+    │   ├───models
+    │   │   └───lazy_predict.py
+    │   │   └───train_model.py
+    │   │   └───predict_model.py
+    │   └───visualization
+    │       └───visualize.py
+    ├───notebooks
+    │   └───main.py
+    │   └───mew_dataset.py
+    ├───models
+    ├───plots
+    ├───references
+    ├───setup.py
+    ├───requirements.txt
+    ├───README.md
+    └───LICENSE
+
+```
+
 Functions
+
+# License
+[MIT License](LICENSE)
