@@ -10,25 +10,25 @@ In the digital age, cybersecurity threats pose a significant challenge to indivi
 # Getting Started
 Follow these steps to set up your running environment.
 
-## Download Data
+### Download Data
 There are two ways to download data, through [Kaggle Website](https://www.kaggle.com/) or through [API calls - How To Efficiently Download Any Dataset from Kaggle](https://ravi-chan.medium.com/how-to-download-any-data-set-from-kaggle-7e2adc152d7f)  
 
 In our [notebooks](notebooks/), we uses API calls to download data, so you need to follow the guide in the **Getting Ready** section. If failed, you can also downloaded form Kaggle, and save it under [data](data/).
 
-## Installation
+### Installation
 The python version requirement is **Python >= 3.12**.   
   
-**Step 1: Clone this repository to your local machine**
+- **Step 1: Clone this repository to your local machine**
 ```bash
 git clone https://github.com/Oliverzhang0314/dsa4263-fraud-detection.git
 ```
    
-**Step 2: Navigate to the project directory**
+- **Step 2: Navigate to the project directory**
 ```bash
 cd dsa4263-fraud-detection
 ```
    
-**Step 3: Install the requirements dependencies**
+- **Step 3: Install the requirements dependencies**
 ```bash
 pip install -e .
 ```
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 ***If your development introduces new packages as dependencies, list them in the `requirements.txt` file. Format each dependency on a new line, specifying the exact version to maintain consistency across environments***
 
 # How to use
-File Structure
+**File Structure**
 ```bash
 dsa4263-fraud-detection
     ├───data
@@ -75,7 +75,15 @@ dsa4263-fraud-detection
 
 ```
 
-Functions
+**Functions**
+
+
+**Hands-on**
+The model on Phishing Domain Detection Dataset can be found here: [Phishing Domain](notebooks/main.ipynb) 
+The model on Malicious URLs Dataset can be found here: [Malicious URLs](notebooks/new_dataset.ipynb)
+
+# Contributor
+Data Science and Analytics Students from National University of Singapore: Duan Tianyu, Qiu qishuo, Zhang Xiangyu, Zhao Xi, Zhu Yi Fu
 
 # License
 [MIT License](LICENSE)
