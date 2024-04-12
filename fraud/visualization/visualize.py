@@ -16,6 +16,7 @@ import shap
 from lime import lime_tabular
 from pycebox.ice import ice, ice_plot
 
+seed = 2024
 
 def pre_plot(data):
     '''Plot visualization to explore data before training.'''
@@ -108,7 +109,7 @@ def decision_boundary(model, best_params, X_train, y_train):
     plt.savefig("../plots/decision_boundary.png")
     plt.show()
 
-def learning_curve(model, X_train, y_train):
+def learning_curv(model, X_train, y_train):
     '''Plot learning curve.'''
     train_sizes, train_scores, test_scores = learning_curve(model, X_train, y_train)
     display = LearningCurveDisplay(train_sizes=train_sizes, train_scores=train_scores, test_scores=test_scores, score_name="Score")
@@ -136,7 +137,7 @@ def plot_accuracy_vs_k(data, y_column, k_values, seed=1):
         X_train_reduced, X_test_reduced, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=reduced_df[y_column])
 
         # Train a Random Forest classifier
-        clf = train(RandomForestClassifier(random_state=seed), X_train_reduced, y_train)
+        clf = train(RandomForestClassifier(random_state=seed), X_train_reduced, y_train, f"../models/feature_selected_model_{k}.pkl")
         y_pred = predict(clf, X_test_reduced, y_test)
 
         # Predict and calculate accuracy
@@ -158,7 +159,7 @@ def plot_accuracy_vs_k(data, y_column, k_values, seed=1):
 
     # return accuracies, recalls
 
-def shap_plot(data, y_column, k, seed=1):
+def shap_plot(data, y_column, k, model, seed=1):
     '''Plot SHAP value for first k rows.'''
     
     # Preprocess the dataset to splot train test set
@@ -167,8 +168,7 @@ def shap_plot(data, y_column, k, seed=1):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=data[y_column][1:k])
 
     # Rf Classifier
-    clf = train(RandomForestClassifier(random_state=seed), X_train, y_train)
-    explainer = shap.Explainer(clf)
+    explainer = shap.Explainer(model)
     shap_values = explainer.shap_values(X)
     shap_values = shap_values[..., 0]
     expected_value = explainer.expected_value

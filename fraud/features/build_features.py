@@ -1,10 +1,11 @@
+import os
 import re
 import tldextract
-from SPF2IP import SPF2IP
 from urllib.parse import urlparse, parse_qs, unquote
+from SPF2IP import SPF2IP
 from googlesearch import search
 
-def process_new_url(df):
+def process_new_url(df, path="../data/processed"):
     '''
     parse 'url' column of df into domain, directory, file and params.
     Also providing length of each property.
@@ -45,8 +46,12 @@ def process_new_url(df):
     df.loc[:, 'directory_length'] = df['directory'].str.len()
     df.loc[:, 'file_length'] = df['file'].str.len()
     df.loc[:, 'params_length'] = df['params'].str.len()
+        
+    # Upload dataset 
+    filename="malicious-urls-dataset/result.csv"
+    file_path = os.path.join(path, filename)
+    df.to_csv(file_path, index=False)
     
-    df.to_csv("result.csv")
     return df
 
 def remove_trailing(url):
@@ -67,7 +72,7 @@ def parse_domain(url):
         return urlparse(url).netloc
     
 def parse_dir(url):
-    file_ext = [".htm", ".html", ".gif", ".jpg", ".png", ".js", ".java", ".class", 
+    file_ext = [".htm", ".html", ".gif", ".jpg", ".png", ".js", ".java", ".class", ".txt", 
                 ".php", ".php3", ".shtm", ".shtml", ".asp", ".cfm", ".cfml", ".cgi", ".do", ".ars"]
     
     url_split = url.strip("/").split("/")
@@ -101,8 +106,8 @@ def parse_dir(url):
             return "/".join(url_split[1:-1]) + "/" + last_chunk
     
 def parse_file(url):
-    file_ext = [".htm", ".html", ".gif", ".jpg", ".png", ".js", ".java", ".class", 
-                ".php", ".php3", ".shtm", ".shtml", ".asp", ".cfm", ".cfml"]
+    file_ext = [".htm", ".html", ".gif", ".jpg", ".png", ".js", ".java", ".class", ".txt", 
+                ".php", ".php3", ".shtm", ".shtml", ".asp", ".cfm", ".cfml", ".cgi", ".do", ".ars"]
     
     url_split = url.split("/")
     if len(url_split) <= 1:
@@ -214,7 +219,7 @@ def count_params(url):
 
 
 # use this to complete preprocessing of new dataset 
-def reformat_df(df):
+def reformat_df(df, path="./"):
     '''
     modify df inplace, adding in extracted features
     '''
@@ -244,5 +249,10 @@ def reformat_df(df):
     # Create a mapping dictionary
     label_mapping = {'benign': 0, 'phishing': 1}
     df_new['phishing'] = df_new['type'].map(label_mapping)
+    
+    # Upload dataset 
+    filename="malicious-urls-dataset/malicious_phish.csv"
+    file_path = os.path.join(path, filename)
+    df.to_csv(file_path, index=False)
     
     return df_new

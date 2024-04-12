@@ -50,7 +50,7 @@ def upload(file, path="./"):
     # Upload dataset 
     filename="dataset-phishing-domain-detection-cybersecurity/dataset_cybersecurity_michelle.csv"
     file_path = os.path.join(path, filename)
-    file.to_csv(file_path)
+    file.to_csv(file_path, index=False)
     
     return file
 
@@ -101,7 +101,7 @@ def upload_new(file, path="./"):
     # Upload dataset 
     filename="malicious-urls-dataset/malicious_phish.csv"
     file_path = os.path.join(path, filename)
-    file.to_csv(file_path)
+    file.to_csv(file_path, index=False)
     
     return file
     
