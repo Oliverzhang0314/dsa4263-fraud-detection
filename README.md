@@ -17,7 +17,8 @@ In our [notebooks](notebooks/), we uses API calls to download data, so you do ne
 
 ## Installation
 The python version requirement is **Python >= 3.12**.
-<br>
+
+
 Step 1: Clone this repository to your local machine 
 
 ```bash
