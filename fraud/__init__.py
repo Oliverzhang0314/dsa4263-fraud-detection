@@ -2,6 +2,7 @@ from .data.make_dataset import (
     download_and_load,
     download_and_load_new,
     download, load, upload,
+    download_new, load_new, upload_new
 )
 
 from .features.pre_processing import (

@@ -10,7 +10,5 @@ pycebox==0.0.1
 lime==0.2.0.1
 skimpy==0.0.14
 tldextract==5.1.2
-SPF2IP==1.0.5
-googlesearch-python==1.2.3
 kaggle
 opendatasets

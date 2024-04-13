@@ -2,15 +2,15 @@ import os
 import re
 import tldextract
 from urllib.parse import urlparse, parse_qs, unquote
-from SPF2IP import SPF2IP
+import dns.resolver
 from googlesearch import search
+from IPython.display import display
 
 def process_new_url(df, path="../data/processed"):
     '''
     parse 'url' column of df into domain, directory, file and params.
     Also providing length of each property.
     Adding 10 new columns, saving one local csv: 'result.csv'
-
     '''
     # Remove trailing space and quotation
     df['parsed_url'] = df['url'].apply(lambda x: remove_trailing(x))
@@ -21,20 +21,12 @@ def process_new_url(df, path="../data/processed"):
     # Decode
     df['parsed_url'] = df['parsed_url'].apply(lambda x: decode(x))
     
-    # Extract domain
-    # try:
-    #     df['domain'] = df['parsed_url'].apply(lambda x: tldextract.extract(x).domain + '.' + tldextract.extract(x).suffix)
-    # except:
-    #     df.loc[:, 'domain'] = None
-    
     df['domain'] = df['parsed_url'].apply(lambda x: parse_domain(x))
 
     # Extract directory
-    # df['directory'] = df['url'].apply(lambda x: os.path.dirname(urlparse(x).path))
     df['directory'] = df['parsed_url'].apply(lambda x: parse_dir(x))
 
     # Extract file
-    # df['file'] = df['url'].apply(lambda x: os.path.basename(urlparse(x).path))
     df['file'] = df['parsed_url'].apply(lambda x: parse_file(x))
     
     # Extract params
@@ -130,18 +122,17 @@ def special_chars_qty(df):
     features = {'at':'@', 'questionmark':'?', 'underline':'_', 'hyphen':'-', 'equal':'=', 'dot':'.', 
             'hashtag':'#', 'percent':'%', 'plus':'+', 'dollar':'$', 'exclamation':'!', 'asterisk':'*', 
             'comma':',', 'slash':'/', 'space':' ', 'tilde':'~','and':'&'}
-    cols=['url','domain','params','directory','file']
+    cols=['url','domain','directory','file','params']
 
     # add quantity of special characters for all cols
     for i in range(len(cols)):
         for key, value in features.items():
                 df.loc[:, "qty_" + key + '_'+ cols[i]] = df.loc[:, cols[i]].apply(lambda x: x.count(value) if x else 0)
 
-    # add vowel qtr for domain
+    # add vowel qty for domain
     df.loc[:,"qty_vowels_domain"] = df.loc[:,'domain'].apply(lambda x: 0 if x is None else sum(char.lower() in vowels for char in x))
 
     return df   
-
 
 def shortened(url):
     match = re.search(
@@ -159,35 +150,29 @@ def shortened(url):
     else:
         return 0 
 
-
+# check if existed in google
 def check_google_index(url):
     site = search(url, 10)
     return 1 if site else 0
 
-
 # check if email in url
 def check_email(url):
-    try:
-        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-        if(re.fullmatch(regex, url)):
-            return 1
-        else:
-            return 0
-    except:
-        return -1
-
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if(re.fullmatch(regex, url)):
+        return 1
+    else:
+        return 0
 
 # check if domain has spf record
-def check_spf(dom):
+def check_spf(domain_name):
+    """
+    Get the SPF record recorded in DNS for a specific domain name. Returns None if not found.
+    """
     try:
-        spf_records = SPF2IP().query(dom)
-        if spf_records:
-            return 1
-        else:
-            return 0
+        spf_records = dns.resolver.query(domain_name) 
+        return 1
     except:
-        return -1
-
+        return 0
 
 # check the quantity of tlds in url
 def count_tlds(url):
@@ -199,7 +184,6 @@ def count_tlds(url):
     
     # Return the count of unique TLDs
     return len(set(tlds))
-
 
 # check the number of params in url
 def count_params(url):
@@ -217,9 +201,8 @@ def count_params(url):
     
     return num_params
 
-
 # use this to complete preprocessing of new dataset 
-def reformat_df(df, path="./"):
+def reformat_df(df):
     '''
     modify df inplace, adding in extracted features
     '''
@@ -237,9 +220,6 @@ def reformat_df(df, path="./"):
     # check if email is in utl
     df_new.loc[:,'email_in_url'] = df_new.loc[:,'url'].apply(lambda i: check_email(i))
 
-    # check if domain has spf record
-    df_new.loc[:,'domain_spf'] = df_new.loc[:,'domain'].apply(check_spf)
-
     # check qty of tld in url
     df_new.loc[:,'qty_tld_url']=df_new.loc[:,'url'].apply(count_tlds)
     
@@ -250,9 +230,45 @@ def reformat_df(df, path="./"):
     label_mapping = {'benign': 0, 'phishing': 1}
     df_new['phishing'] = df_new['type'].map(label_mapping)
     
-    # Upload dataset 
-    filename="malicious-urls-dataset/malicious_phish.csv"
-    file_path = os.path.join(path, filename)
-    df.to_csv(file_path, index=False)
-    
+    # Drop extra columns
+    df_new = df_new.reset_index(drop=True)
+    display(df_new.head(5))
+    display(df.describe())
+    df_new = df_new.drop(columns=['url','domain','directory','params','file', 'type', 'parsed_url'])
+
     return df_new
+
+#### Count redirects
+# def count_redirects(url):
+#     try:
+#         response = requests.get(url, allow_redirects=True)
+#         num_redirects = len(response.history)
+#         return num_redirects
+#     except requests.exceptions.RequestException:
+#         # If an exception occurs during the request (e.g., invalid URL), return -1
+#         return -1
+
+#### Count TTL for hostname of url
+# def get_ttl(url):
+#     try:
+#         result = dns.resolver.resolve(url, 'A')
+#         if result.response.answer:
+#             return int(result.response.answer[0].ttl)
+#     except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN,
+#             dns.exception.Timeout, dns.resolver.NoNameservers):
+#         return 0
+#     return 0
+
+#### Check SSL Cert
+# import requests
+# def check_ssl_certificate(url):
+#     try:
+#         response = requests.head(url)
+#         # Check if the response status code is 200 (OK) or 301 (Moved Permanently)
+#         if response.status_code == 200 or response.status_code == 301:
+#             return 1  # SSL certificate is available
+#     except requests.exceptions.SSLError:
+#         pass  # SSL certificate is not available or there is an SSL error
+#     except requests.exceptions.RequestException:
+#         pass  # Handle other request exceptions if needed
+#     return 0  # SSL certificate is not available

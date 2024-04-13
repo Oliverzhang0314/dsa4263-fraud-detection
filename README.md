@@ -11,25 +11,29 @@ In the digital age, cybersecurity threats pose a significant challenge to indivi
 Follow these steps to set up your running environment.
 
 ### Download Data
-There are two ways to download data, through [Kaggle Website](https://www.kaggle.com/) or through [API calls - How To Efficiently Download Any Dataset from Kaggle](https://ravi-chan.medium.com/how-to-download-any-data-set-from-kaggle-7e2adc152d7f)  
+There are two ways to download data from:
+- [Kaggle Website](https://www.kaggle.com/)
+- [API calls - How To Efficiently Download Any Dataset from Kaggle](https://ravi-chan.medium.com/how-to-download-any-data-set-from-kaggle-7e2adc152d7f)  
 
-In our [notebooks](notebooks/), we uses API calls to download data, so you need to follow the guide in the **Getting Ready** section. If failed, you can also downloaded form Kaggle, and save it under [data](data/).
+In our [notebooks](notebooks/), we uses API calls to download data, so you need to follow the guide in the **Getting Ready** section. 
+  
+If failed, you can also downloaded form Kaggle, and save it under [data](data/).
+
+### Understand Data
+Refer to [Data Dictionary](references/datadictionary.txt) for the definition of each column in the phishing dataset.
 
 ### Installation
 The python version requirement is **Python >= 3.12**.
-
 
 - **Step 1: Clone this repository to your local machine**
 ```bash
 git clone https://github.com/Oliverzhang0314/dsa4263-fraud-detection.git
 ```
 
-
 - **Step 2: Navigate to the project directory**
 ```bash
 cd dsa4263-fraud-detection
 ```
-
 
 - **Step 3: Install the requirements dependencies**
 ```bash
@@ -66,10 +70,12 @@ dsa4263-fraud-detection
     │   └───visualization
     │       └───visualize.py
     ├───notebooks
-    │   └───main.py
-    │   └───mew_dataset.py
+    │   └───phishing_domain.py
+    │   └───malicious_url.py
+    │   └───feature_comparison.py
     ├───models
     ├───plots
+    ├───features
     ├───references
     ├───setup.py
     ├───requirements.txt
@@ -81,9 +87,12 @@ dsa4263-fraud-detection
 **Functions**
 
 
-**Hands-on**  
-The model on Phishing Domain Detection Dataset can be found here: [Phishing Domain](notebooks/main.ipynb) 
-The model on Malicious URLs Dataset can be found here: [Malicious URLs](notebooks/new_dataset.ipynb)
+**Hands-on**
+The model on Phishing Domain Detection Dataset can be found here: [Phishing Domain](notebooks/phishing_domain.ipynb)
+
+The model on Malicious URLs Dataset can be found here: [Malicious URLs](notebooks/malicious_url.ipynb)
+
+The evaluation of Jaccrd Similarity between feature importance of two models can be found here: [Feature Importance](notebook/feature_comparison.ipynb)
 
 # Contributor
 A team of 5 Data Science and Analytics Students from National University of Singapore: Duan Tianyu, Qiu qishuo, Zhang Xiangyu, Zhao Xi, Zhu Yi Fu

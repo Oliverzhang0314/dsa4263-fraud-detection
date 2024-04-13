@@ -5,12 +5,13 @@ def preprocess(data):
     '''
     The pre-processing steps involved:
         - Remove redundant columns
+        - Remove cols not available in the new dataset
         - Min max scaling of features
-        - 
     '''
     
     # Preprocessing steps
     data = remove_redundant_cols(data)
+    data = remove_missing_cols(data)
     data = scale_cols(data)
     
     # Overview of data
@@ -19,7 +20,7 @@ def preprocess(data):
     
     return data
 
-def preprocess_with_feature_selection(data, topk, remove_missing_col):
+def preprocess_with_feature_selection(data, topk=20, remove_missing_col=False):
     '''
     The pre-processing steps with feature selection added:
         - Remove redundant columns (min==max)
@@ -30,7 +31,7 @@ def preprocess_with_feature_selection(data, topk, remove_missing_col):
     data = remove_redundant_cols(data)
     if remove_missing_col:
         data = remove_missing_cols(data)
-    data = select_top_k_based_on_mutual_information(data, topk=20)
+    data = select_top_k_based_on_mutual_information(data, topk=topk)
     data = scale_cols(data)
 
     return data
@@ -54,9 +55,15 @@ def remove_missing_cols(data):
     This is to ensure fairness when testing generalisability of this model.'''
 
     # These are the cols not present in the new 'malicious-urls-dataset' that we found.
-    missing_cols = ['asn_ip', 'domain_in_ip', 'qty_ip_resolved', 'qty_mx_servers', 'qty_nameservers', 'qty_redirects', 'server_client_domain', 'time_domain_activation', 'time_domain_expiration', 'time_response', 'tls_ssl_certificate', 'ttl_hostname']
+    missing_cols = ['asn_ip', 'domain_in_ip', 'qty_ip_resolved', 'qty_mx_servers', 'qty_nameservers', \
+        'qty_redirects', 'server_client_domain', 'time_domain_activation', 'time_domain_expiration', \
+        'time_response', 'tls_ssl_certificate', 'ttl_hostname', 'domain_spf']
+    
     # generate a new df that remove these cols
-    data = data.drop(columns=missing_cols)
+    for col in missing_cols:
+        if col in data.columns:
+            data = data.drop(columns=[col])
+    return data
 
     return data
 

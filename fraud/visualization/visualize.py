@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pickle
 from sklearn import metrics
 from sklearn.metrics import accuracy_score, recall_score, confusion_matrix, ConfusionMatrixDisplay, precision_recall_curve, PrecisionRecallDisplay
 from sklearn.calibration import CalibrationDisplay
@@ -16,7 +17,7 @@ import shap
 from lime import lime_tabular
 from pycebox.ice import ice, ice_plot
 
-seed = 2024
+seed = 4263
 
 def pre_plot(data):
     '''Plot visualization to explore data before training.'''
@@ -30,7 +31,7 @@ def distribution_plot(data, col_name):
     plt.savefig(f'../plots/distribution_plot.png')
     plt.show()
 
-def feat_importance(model, feat_cols):
+def feat_importance(model, feat_cols, path="./"):
     '''Rank feature importance among all features.'''
     # feature_importance = clf.feature_importances_
     feature_importances = np.mean([
@@ -43,6 +44,9 @@ def feat_importance(model, feat_cols):
     plt.title("Feature Importance of Classification Model")
     plt.savefig("../plots/feat_importance.png")
     plt.show()
+    
+    with open(path, "wb") as f:
+        pickle.dump(list(feat_cols[np.argsort(feature_importances)])[::-1], f)
     
 def confusion_plot(y_test, y_pred):
     '''Plot confusion matrix.'''
@@ -118,7 +122,7 @@ def learning_curv(model, X_train, y_train):
     plt.savefig("../plots/learning_curve.png")
     plt.show()
 
-def plot_accuracy_vs_k(data, y_column, k_values, seed=1):
+def plot_accuracy_vs_k(data, y_column, k_values, seed=4263):
     '''Plot test accuracy against k, where k is the number of top predictors selected by mutual information.'''
     
     # Initialize metrics list
@@ -137,7 +141,7 @@ def plot_accuracy_vs_k(data, y_column, k_values, seed=1):
         X_train_reduced, X_test_reduced, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=reduced_df[y_column])
 
         # Train a Random Forest classifier
-        clf = train(RandomForestClassifier(random_state=seed), X_train_reduced, y_train, f"../models/feature_selected_model_{k}.pkl")
+        clf = train(RandomForestClassifier(random_state=seed), X_train_reduced, y_train, path=f"../models/feature_selected_model_{k}.pkl")
         y_pred = predict(clf, X_test_reduced, y_test)
 
         # Predict and calculate accuracy
@@ -159,7 +163,7 @@ def plot_accuracy_vs_k(data, y_column, k_values, seed=1):
 
     # return accuracies, recalls
 
-def shap_plot(data, y_column, k, model, seed=1):
+def shap_plot(data, y_column, k, seed=4263):
     '''Plot SHAP value for first k rows.'''
     
     # Preprocess the dataset to splot train test set
@@ -168,7 +172,8 @@ def shap_plot(data, y_column, k, model, seed=1):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=data[y_column][1:k])
 
     # Rf Classifier
-    explainer = shap.Explainer(model)
+    clf = train(RandomForestClassifier(random_state=seed), X_train, y_train, path=f"../models/shap_model.pkl")
+    explainer = shap.Explainer(clf)
     shap_values = explainer.shap_values(X)
     shap_values = shap_values[..., 0]
     expected_value = explainer.expected_value
