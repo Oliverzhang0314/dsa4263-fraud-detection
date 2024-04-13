@@ -39,10 +39,10 @@ def process_new_url(df, path="../data/processed"):
     df.loc[:, 'file_length'] = df['file'].str.len()
     df.loc[:, 'params_length'] = df['params'].str.len()
         
-    # Upload dataset 
-    filename="malicious-urls-dataset/result.csv"
-    file_path = os.path.join(path, filename)
-    df.to_csv(file_path, index=False)
+    # # Upload dataset 
+    # filename="malicious-urls-dataset/result.csv"
+    # file_path = os.path.join(path, filename)
+    # df.to_csv(file_path, index=False)
     
     return df
 
