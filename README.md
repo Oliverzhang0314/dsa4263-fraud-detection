@@ -13,7 +13,7 @@ Follow these steps to set up your running environment.
 ### Download Data
 There are two ways to download data from:
 - [Kaggle Website](https://www.kaggle.com/)
-- [API calls - How To Efficiently Download Any Dataset from Kaggle](https://ravi-chan.medium.com/how-to-download-any-data-set-from-kaggle-7e2adc152d7f)  \
+- [API calls - How To Efficiently Download Any Dataset from Kaggle](https://ravi-chan.medium.com/how-to-download-any-data-set-from-kaggle-7e2adc152d7f)
 
 ***In our [notebooks](notebooks/), we uses API calls to download data, so you need to follow the guide in the **<Getting Ready>** section. If failed, you can also downloaded form Kaggle, and save it under [data](data/).***
 
