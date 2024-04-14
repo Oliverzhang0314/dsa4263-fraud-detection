@@ -88,20 +88,20 @@ dsa4263-fraud-detection
 download_and_load(path="./", head_num=None) - Download and load 1st URL dataset \
 upload(file, path="./") - Upload processed 1st URL dataset \
 download_and_load_new(path="./", head_num=None) - Download and load 2nd URL dataset \
-upload_new(file, path="./") - Upload processed 2nd URL dataset \
+upload_new(file, path="./") - Upload processed 2nd URL dataset
 
 - ***Preprocessing*** \
 preprocess(data) - The pre-processing steps involved: Remove redundant columns, Remove cols not available in the new dataset, Min max scaling of features \
-preprocess_with_feature_selection(data, topk=20, remove_missing_col=False) - The pre-processing steps add an extra step of Select top K features by mutual information \
+preprocess_with_feature_selection(data, topk=20, remove_missing_col=False) - The pre-processing steps add an extra step of Select top K features by mutual information
 
 - ***Feature Engineering*** \
 process_new_url(df, path="../data/processed") - Parse 'url' column of df into domain, directory, file and params \
-reformat_df(df) - Modify df inplace, adding in extracted features such as url_shortened, qty_params, url_google_index, domain_google_index, email_in_url, qty_tld_url, tld_present_params \
+reformat_df(df) - Modify df inplace, adding in extracted features such as url_shortened, qty_params, url_google_index, domain_google_index, email_in_url, qty_tld_url, tld_present_params
 
 - ***Model Fitting*** \
 lazy_predict(data, exclude=None) - Initial prediction using multiple choices of classifiers \
 train(model, X_train, y_train, param_grid=None, iteration=50, path="./") - Train and tune hyperparameters for best performed model \
-predict(model, X_test, y_test=None) - Predict using fine-tuned model \
+predict(model, X_test, y_test=None) - Predict using fine-tuned model
 
 - ***Evaluation*** \
 distribution_plot(data, col_name) - Plot distribution of selected categorical column \
@@ -115,7 +115,7 @@ learning_curv(model, X_train, y_train) - Plot learning curve \
 plot_accuracy_vs_k(data, y_column, k_values, seed=4263) - Plot test accuracy against k, where k is the number of top predictors selected by mutual information \
 shap_plot(data, y_column, k, seed=4263) - Plot SHAP value for first k rows \
 lime_plot(X_train, X_test, y_test, k, model) - Plot LIME value for k random rows \
-ice_curve(col_of_interest, X_train, model) - Plot ICE curve for column of interest \
+ice_curve(col_of_interest, X_train, model) - Plot ICE curve for column of interest
 
 **Hands-on**
 
