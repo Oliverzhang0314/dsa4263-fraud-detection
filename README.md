@@ -68,10 +68,10 @@ dsa4263-fraud-detection
     │   └───visualization
     │       └───visualize.py
     ├───notebooks
-    │   └───EDA.py
-    │   └───phishing_domain.py
-    │   └───malicious_url.py
-    │   └───feature_comparison.py
+    │   └───EDA.ipynb
+    │   └───phishing_domain.ipynb
+    │   └───malicious_url.ipynb
+    │   └───feature_comparison.ipynb
     ├───models
     ├───plots
     ├───features
