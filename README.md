@@ -26,13 +26,13 @@ The python version requirement is **Python >= 3.12**.
 - **Step 1: Clone this repository to your local machine**
 ```bash
 git clone https://github.com/Oliverzhang0314/dsa4263-fraud-detection.git
-``` 
-\
+```
+ \
 - **Step 2: Navigate to the project directory**
 ```bash
 cd dsa4263-fraud-detection
 ```
-\
+ \
 - **Step 3: Install the requirements dependencies**
 ```bash
 pip install -e .
