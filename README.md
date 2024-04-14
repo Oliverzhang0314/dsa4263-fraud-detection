@@ -84,26 +84,26 @@ dsa4263-fraud-detection
 
 **Functions**
 
-***Download and Load Data***
+- ***Download and Load Data*** \
 download_and_load(path="./", head_num=None) - Download and load 1st URL dataset \
 upload(file, path="./") - Upload processed 1st URL dataset \
 download_and_load_new(path="./", head_num=None) - Download and load 2nd URL dataset \
 upload_new(file, path="./") - Upload processed 2nd URL dataset \
 
-***Preprocessing***
+- ***Preprocessing*** \
 preprocess(data) - The pre-processing steps involved: Remove redundant columns, Remove cols not available in the new dataset, Min max scaling of features \
 preprocess_with_feature_selection(data, topk=20, remove_missing_col=False) - The pre-processing steps add an extra step of Select top K features by mutual information \
 
-***Feature Engineering***
+- ***Feature Engineering*** \
 process_new_url(df, path="../data/processed") - Parse 'url' column of df into domain, directory, file and params \
 reformat_df(df) - Modify df inplace, adding in extracted features such as url_shortened, qty_params, url_google_index, domain_google_index, email_in_url, qty_tld_url, tld_present_params \
 
-***Model Fitting***
+- ***Model Fitting*** \
 lazy_predict(data, exclude=None) - Initial prediction using multiple choices of classifiers \
 train(model, X_train, y_train, param_grid=None, iteration=50, path="./") - Train and tune hyperparameters for best performed model \
 predict(model, X_test, y_test=None) - Predict using fine-tuned model \
 
-***Evaluation***
+- ***Evaluation*** \
 distribution_plot(data, col_name) - Plot distribution of selected categorical column \
 feat_importance(model, feat_cols, path="./") - Rank feature importance among all features \
 confusion_plot(y_test, y_pred) - Plot confusion matrix \
