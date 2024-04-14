@@ -1,0 +1,115 @@
+Column, Description, Type
+qty_dot_url, Quantity of dots in the URL, float
+qty_hyphen_url, Quantity of hyphens in the URL, float
+qty_underline_url, Quantity of underscores in the URL, float
+qty_slash_url, Quantity of slashes in the URL, float
+qty_questionmark_url, Quantity of question marks in the URL, float
+qty_equal_url, Quantity of equal signs in the URL, float
+qty_at_url, Quantity of "@" symbols in the URL, float
+qty_and_url, Quantity of "&" symbols in the URL, float
+qty_exclamation_url, Quantity of exclamation marks in the URL, float
+qty_space_url, Quantity of spaces in the URL, float
+qty_tilde_url, Quantity of tildes in the URL, float
+qty_comma_url, Quantity of commas in the URL, float
+qty_plus_url, Quantity of plus signs in the URL, float
+qty_asterisk_url, Quantity of asterisks in the URL, float
+qty_hashtag_url, Quantity of hashtags in the URL, float
+qty_dollar_url, Quantity of dollar signs in the URL, float
+qty_percent_url, Quantity of percent signs in the URL, float
+qty_tld_url, Quantity of top-level domains in the URL, float
+length_url, Length of the URL, float
+qty_dot_domain, Quantity of dots in the domain, float
+qty_hyphen_domain, Quantity of hyphens in the domain, float
+qty_underline_domain, Quantity of underscores in the domain, float
+qty_slash_domain, Quantity of slashes in the domain, float
+qty_questionmark_domain, Quantity of question marks in the domain, float
+qty_equal_domain, Quantity of equal signs in the domain, float
+qty_at_domain, Quantity of "@" symbols in the domain, float
+qty_and_domain, Quantity of "&" symbols in the domain, float
+qty_exclamation_domain, Quantity of exclamation marks in the domain, float
+qty_space_domain, Quantity of spaces in the domain, float
+qty_tilde_domain, Quantity of tildes in the domain, float
+qty_comma_domain, Quantity of commas in the domain, float
+qty_plus_domain, Quantity of plus signs in the domain, float
+qty_asterisk_domain, Quantity of asterisks in the domain, float
+qty_hashtag_domain, Quantity of hashtags in the domain, float
+qty_dollar_domain, Quantity of dollar signs in the domain, float
+qty_percent_domain, Quantity of percent signs in the domain, float
+qty_vowels_domain, Quantity of vowels in the domain, float
+domain_length, Length of the domain, float
+qty_dot_directory, Quantity of dots in the directory, float
+qty_hyphen_directory, Quantity of hyphens in the directory, float
+qty_underline_directory, Quantity of underscores in the directory, float
+qty_slash_directory, Quantity of slashes in the directory, float
+qty_questionmark_directory, Quantity of question marks in the directory, float
+qty_equal_directory, Quantity of equal signs in the directory, float
+qty_at_directory, Quantity of "@" symbols in the directory, float
+qty_and_directory, Quantity of "&" symbols in the directory, float
+qty_exclamation_directory, Quantity of exclamation marks in the directory, float
+qty_space_directory, Quantity of spaces in the directory, float
+qty_tilde_directory, Quantity of tildes in the directory, float
+qty_comma_directory, Quantity of commas in the directory, float
+qty_plus_directory, Quantity of plus signs in the directory, float
+qty_asterisk_directory, Quantity of asterisks in the directory, float
+qty_hashtag_directory, Quantity of hashtags in the directory, float
+qty_dollar_directory, Quantity of dollar signs in the directory, float
+qty_percent_directory, Quantity of percent signs in the directory, float
+directory_length, Length of the directory, float
+qty_dot_file, Quantity of dots in the file, float
+qty_hyphen_file, Quantity of hyphens in the file, float
+qty_underline_file, Quantity of underscores in the file, float
+qty_slash_file, Quantity of slashes in the file, float
+qty_questionmark_file, Quantity of question marks in the file, float
+qty_equal_file, Quantity of equal signs in the file, float
+qty_at_file, Quantity of "@" symbols in the file, float
+qty_and_file, Quantity of "&" symbols in the file, float
+qty_exclamation_file, Quantity of exclamation marks in the file, float
+qty_space_file, Quantity of spaces in the file, float
+qty_tilde_file, Quantity of tildes in the file, float
+qty_comma_file, Quantity of commas in the file, float
+qty_plus_file, Quantity of plus signs in the file, float
+qty_asterisk_file, Quantity of asterisks in the file, float
+qty_hashtag_file, Quantity of hashtags in the file, float
+qty_dollar_file, Quantity of dollar signs in the file, float
+qty_percent_file, Quantity of percent signs in the file, float
+file_length, Length of the file, float
+qty_dot_params, Quantity of dots in the parameters, float
+qty_hyphen_params, Quantity of hyphens in the parameters, float
+qty_underline_params, Quantity of underscores in the parameters, float
+qty_slash_params, Quantity of slashes in the parameters, float
+qty_questionmark_params, Quantity of question marks in the parameters, float
+qty_equal_params, Quantity of equal signs in the parameters, float
+qty_at_params, Quantity of "@" symbols in the parameters, float
+qty_and_params, Quantity of "&" symbols in the parameters, float
+qty_exclamation_params, Quantity of exclamation marks in the parameters, float
+qty_space_params, Quantity of spaces in the parameters, float
+qty_tilde_params, Quantity of tildes in the parameters, float
+qty_comma_params, Quantity of commas in the parameters, float
+qty_plus_params, Quantity of plus signs in the parameters, float
+qty_asterisk_params, Quantity of asterisks in the parameters, float
+qty_hashtag_params, Quantity of hashtags in the parameters, float
+qty_dollar_params, Quantity of dollar signs in the parameters, float
+qty_percent_params, Quantity of percent signs in the parameters, float
+params_length, Length of the parameters, float
+tld_present_params, Top-level domain present in parameters, float
+qty_params, Quantity of parameters, float
+email_in_url, Email in URL, float
+url_google_index, URL is indexed by Google, float
+domain_google_index, Domain is indexed by Google, float
+url_shortened, URL shortened, float
+domain_spf, Domain SPF, float
+asn_ip, ASN IP, float
+qty_ip_resolved, Quantity of IP addresses resolved, float
+qty_nameservers, Quantity of name servers, float
+qty_mx_servers, Quantity of MX servers, float
+ttl_hostname, TTL hostname, float
+tls_ssl_certificate, TLS SSL certificate, float
+qty_redirects, Quantity of redirects, float
+time_response, Time response, float
+domain_in_ip, Domain in IP, float
+server_client_domain, Server client in domain, float
+phishing, Phishing indicator, float
+*time_domain_activation, Time domain activation, float
+*time_domain_expiration, Time domain expiration, float
+
+*: unclear explanation by the dataset's publisher
